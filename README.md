@@ -1,3 +1,7 @@
+# Fork notes
+
+Forked version, with some changes to use in embedded devices that don't have complete POSIX library.
+
 # WHAT
 
 `c-ringbuf` is a simple ring buffer implementation in C.
