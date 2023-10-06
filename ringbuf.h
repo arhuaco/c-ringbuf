@@ -27,7 +27,14 @@
  */
 
 #include <stddef.h>
+
+#ifndef C_RINGBUF_MINIMAL
 #include <sys/types.h>
+#endif
+
+#ifdef C_RINGBUF_MINIMAL
+typedef long ssize_t;
+#endif
 
 typedef struct ringbuf_t *ringbuf_t;
 

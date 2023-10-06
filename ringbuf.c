@@ -19,9 +19,19 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifndef C_RINGBUF_MINIMAL
 #include <sys/param.h>
 #include <sys/types.h>
 #include <unistd.h>
+#else
+#ifndef MAX
+#define MAX(a, b) ((a) > (b) ? (a) : (b))
+#endif
+#ifndef MIN
+#define MIN(a, b) ((a) < (b) ? (a) : (b))
+#endif
+#endif
 
 /*
  * The code is written for clarity, not cleverness or performance, and
@@ -183,6 +193,7 @@ void *ringbuf_memcpy_into(ringbuf_t dst, const void *src, size_t count) {
   return dst->head;
 }
 
+#ifndef C_RINGBUF_MINIMAL
 ssize_t ringbuf_read(int fd, ringbuf_t rb, size_t count) {
   const uint8_t *bufend = ringbuf_end(rb);
   size_t nfree = ringbuf_bytes_free(rb);
@@ -207,6 +218,7 @@ ssize_t ringbuf_read(int fd, ringbuf_t rb, size_t count) {
 
   return n;
 }
+#endif
 
 void *ringbuf_memcpy_from(void *dst, ringbuf_t src, size_t count) {
   size_t bytes_used = ringbuf_bytes_used(src);
@@ -230,6 +242,7 @@ void *ringbuf_memcpy_from(void *dst, ringbuf_t src, size_t count) {
   return src->tail;
 }
 
+#ifndef C_RINGBUF_MINIMAL
 ssize_t ringbuf_write(int fd, ringbuf_t rb, size_t count) {
   size_t bytes_used = ringbuf_bytes_used(rb);
   if (count > bytes_used) return 0;
@@ -250,7 +263,9 @@ ssize_t ringbuf_write(int fd, ringbuf_t rb, size_t count) {
 
   return n;
 }
+#endif
 
+#ifndef C_RINGBUF_MINIMAL
 void *ringbuf_copy(ringbuf_t dst, ringbuf_t src, size_t count) {
   size_t src_bytes_used = ringbuf_bytes_used(src);
   if (count > src_bytes_used) return 0;
@@ -283,3 +298,4 @@ void *ringbuf_copy(ringbuf_t dst, ringbuf_t src, size_t count) {
 
   return dst->head;
 }
+#endif
