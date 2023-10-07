@@ -1,5 +1,5 @@
 CC=clang
-CFLAGS=-O0 -g -Wall -Wpointer-arith -ftrapv -fsanitize=undefined-trap -fsanitize-undefined-trap-on-error
+CFLAGS=-O0 -gdwarf-4 -g -Wall -Wpointer-arith -ftrapv -fsanitize=undefined-trap -fsanitize-undefined-trap-on-error
 
 # or, for gcc...
 #CC=gcc
@@ -16,7 +16,7 @@ coverage: ringbuf-test-gcov
 	  gcov -o ringbuf-gcov.o ringbuf.c
 
 valgrind: ringbuf-test
-	  valgrind ./ringbuf-test
+	  valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./ringbuf-test
 
 help:
 	@echo "Targets:"
