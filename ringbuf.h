@@ -49,6 +49,14 @@ typedef struct ringbuf_t *ringbuf_t;
 ringbuf_t ringbuf_new(size_t capacity);
 
 /*
+ * Create the ringbuf without having it own the memory.
+ *
+ * One byte is used for detecting the full condition,
+ * so capacity = required_capacity + 1.
+ */
+void ringbuf_new_not_owned(ringbuf_t rb, size_t capacity, void *buf);
+
+/*
  * The size of the internal buffer, in bytes. One or more bytes may be
  * unusable in order to distinguish the "buffer full" state from the
  * "buffer empty" state.

@@ -47,6 +47,14 @@ struct ringbuf_t {
   size_t size;
 };
 
+void ringbuf_new_not_owned(ringbuf_t rb, size_t capacity, void *buf) {
+  assert(rb && buf);
+  /* One byte is used for detecting the full condition. */
+  rb->size = capacity + 1;
+  rb->buf = buf;
+  ringbuf_reset(rb);
+}
+
 ringbuf_t ringbuf_new(size_t capacity) {
   ringbuf_t rb = malloc(sizeof(struct ringbuf_t));
   if (rb) {
